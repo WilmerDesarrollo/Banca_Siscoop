@@ -5,6 +5,9 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 
 import com.fenoreste.rest.impl.AbstractFacade;
+import com.fenoreste.rest.modelos.Persona;
+import com.fenoreste.rest.modelos.PersonasPK;
+import com.siscoop.dto.customerDTO;
 
 public abstract class FacadeCustomer<T>{
 	  private static EntityManagerFactory emf;
@@ -13,11 +16,10 @@ public abstract class FacadeCustomer<T>{
 	  public FacadeCustomer(Class<T> entityClass) {
 		    emf =  AbstractFacade.conexion();
 	  }
-          
-  
-                   public List<Object[]>search(String nombre){
-                       EntityManager em=emf.createEntityManager();
-                       
+         
+         
+         public List<Object[]> search(String nombre){
+                       EntityManager em=emf.createEntityManager();                       
                        System.out.println("Lllego a buscar");
                        String consulta="SELECT replace(to_char(p.idorigen,'099999')||to_char(p.idgrupo,'09')||to_char(p.idsocio,'099999'),' ','') as ogs,nombre||' '||appaterno||' '||apmaterno as nombrec,"
                               + "(case  when p.idgrupo=1  then 'Socio Contable'"
@@ -41,16 +43,16 @@ public abstract class FacadeCustomer<T>{
               	            + "when p.idgrupo=81 then 'Empleados'"
               	            + "when p.idgrupo=48 then 'Recursos no socio'"
               	            + "when p.idgrupo=88 then 'Personas bloqueadas cnbv'"
-              	            + "when p.idgrupo=66 then 'Proveedores,personas fisicas'"
-              	            + "when p.idgrupo=67 then 'Proveedores,personas morales'"
+              	            + "when p.idgrupo=66 then 'Proveedores personas fisicas'"
+              	            + "when p.idgrupo=67 then 'Proveedores personas morales'"
               	            + "when p.idgrupo=49 then 'Propietario real no socios'"
-              	            + "when p.idgrupo=65 then 'Usuarios remesas' end) as tps from personas p WHERE nombre||' '||appaterno||' '||apmaterno LIKE '%"+nombre.toUpperCase()+"%'" ;
+              	            + "when p.idgrupo=65 then 'Usuarios remesas' else 'Sin nombre para el grupo' end) as tps from personas p WHERE nombre||' '||appaterno||' '||apmaterno LIKE '%"+nombre.toUpperCase()+"%' " ;
                        System.out.println("aun");
                        try {
                              System.out.println("en el try");
                            Query query=em.createNativeQuery(consulta);
                            lista=query.getResultList();
-                           System.out.println("Salio:"+lista.size());
+                           System.out.println("Registros encontrados:"+lista.size());
                        } catch (Exception e) {
                            System.out.println("Error al buscar cliente:"+e.getMessage());
                        }
@@ -58,13 +60,13 @@ public abstract class FacadeCustomer<T>{
                        return lista;
                    }
           
-	  public List<Object[]>details(String customerId){
+	  public List<Object[]> details(String customerId){
 		 EntityManager em=emf.createEntityManager();
 		 Query query=null; 
 		 List<Object[]>lista=null;
                                      String consulta="SELECT replace(to_char(p.idorigen,'099999')||to_char(p.idgrupo,'09')||to_char(p.idsocio,'099999'),' ','') as ogs,"
 	            + "p.nombre||' '||p.appaterno||' '||p.apmaterno as nomb,"
-                              + "p.curp,"
+                              + "(case when p.curp !=null then p.curp else 'Sin dato' end),"
                               + "(case  when p.idgrupo=1  then 'Socio Contable'"
               	            + "when p.idgrupo=60 then 'Aval no socio'"
              	            + "when p.idgrupo=61 then 'Conyuge no socio'"
@@ -89,9 +91,9 @@ public abstract class FacadeCustomer<T>{
               	            + "when p.idgrupo=66 then 'Proveedores,personas fisicas'"
               	            + "when p.idgrupo=67 then 'Proveedores,personas morales'"
               	            + "when p.idgrupo=49 then 'Propietario real no socios'"
-              	            + "when p.idgrupo=65 then 'Usuarios remesas' end) as tps," 
-                      + "case when p.email='' then 'sin email' else p.email end,"
-                      + "p.celular,"
+              	            + "when p.idgrupo=65 then 'Usuarios remesas' else 'Sin nombre para el grupo' end) as tps," 
+                      + "case when p.email !=null  then p.email else 'Sin dato' end as email,"
+                      + "case when p.celular!=null then p.celular else 'Sin dato' end as celular,"
                       + "(select (case when sc.estatusvivienda=0 then 'Sin datos' "
                       	 + "else (select descripcion from catalogo_menus cm where cm.menu='estatusvivienda' and cm.opcion=sc.estatusvivienda) end)"
                       + "from socioeconomicos sc where sc.idorigen=p.idorigen and sc.idgrupo=p.idgrupo and sc.idsocio=p.idsocio) "
@@ -124,7 +126,7 @@ public abstract class FacadeCustomer<T>{
 	                   lista=query.getResultList();
 		 System.out.println("total de objetos:"+lista.size());
 	  } catch (Exception e) {
-	                   e.printStackTrace();
+	    
 		 System.out.println("Error al obtener cuentas:"+e.getMessage());
 	   }finally {
 	     	em.clear();
@@ -135,11 +137,7 @@ public abstract class FacadeCustomer<T>{
          public List<Object[]>getTemplates(String customerId){
                    EntityManager em=emf.createEntityManager();
                    
-             
-             
-             
-             
-             
+         
              
              
           return null;
@@ -159,6 +157,41 @@ public abstract class FacadeCustomer<T>{
 		  super.finalize(); 
           } 
           
+        public Persona detailss(String customerId){
           
+            System.out.println("Alderson22");
+            
+         
+            System.out.println("Lllego:"+customerId);
+		 EntityManager em=emf.createEntityManager();
+		          System.out.println("dfdsfdsf");
+		 
+		
+                         System.out.println("sdfsdf");
+                         try {
+                PersonasPK pk=new PersonasPK(30298,25,75681);
+		 
+			
+		          System.out.println("czczczxc");
+	          Persona persona=em.find(Persona.class,pk);
+                             System.out.println("Nombre:"+persona);
+            } catch (Exception e) {
+                             System.out.println("Error:"+e.getMessage());
+            }
+		
+               /*    
+                try {
+               
+	    	     System.out.println("Nombre:"+yo.getNombre());
+                            
+	    	    System.out.println("total de objetos:"+lista.size());
+                } catch (Exception e) {
+	   System.out.println("Error obtenido:"+e.getMessage());
+                }finally {
+		     	
+                }*/           
+                return null ;
+         }
+	     
 
 }

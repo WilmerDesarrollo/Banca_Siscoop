@@ -12,10 +12,10 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
 import com.fenoreste.rest.dao.AccountsDAO;
+import com.fenoreste.rest.dto.siscoop.accountDTO;
 import com.google.gson.JsonArray;
 
 @Path("/account")
@@ -28,23 +28,24 @@ public class AccountsServices {
     @Produces({MediaType.APPLICATION_JSON})
     @Consumes({MediaType.APPLICATION_JSON})
     public Response getValidation(String cadena) throws Throwable { 
-
-                  JsonObjectBuilder ObjectBuilder=Json.createObjectBuilder();
+        System.out.println("Llego cadena:"+cadena);
+       JsonObjectBuilder ObjectBuilder=Json.createObjectBuilder();
  	JsonObject DatosOK=null; 	
  	JsonObject JsonNotFound=null;
  	JsonObject JsonError=null;
 
         AccountsDAO aco=new AccountsDAO();
- 
           try {
  	       JSONObject datosEntrada= new JSONObject(cadena);
+               System.out.println("Aqui i i");
  	       String customerId=datosEntrada.getString("customerId");
  	       int productCode=datosEntrada.getInt("productCode");
  	       String  accountType=datosEntrada.getString("accountType");
  	       System.out.println("customerID:"+customerId+"\n"
  				    	  +"productCode:"+productCode+"\n"
  				    	  +"accountType:"+accountType); 
- 	       List<Object[]>lista_objetos=aco.getValidaton(customerId, productCode, accountType);
+ 	      List<Object[]>lista_objetos=aco.getValidaton(customerId, accountType,productCode);
+              
  	      System.out.println("listaaaaaaaaaaaaaaa:"+lista_objetos);
  	      if(lista_objetos!=null){
  	         JsonObjectBuilder desc=Json.createObjectBuilder();
@@ -90,7 +91,7 @@ public class AccountsServices {
     @Consumes({MediaType.APPLICATION_JSON})
     public Response ponerCuentas(String cadena) throws Throwable {
         System.out.println("llegando");
-                 AccountsDAO aco=new AccountsDAO();
+        AccountsDAO aco=new AccountsDAO();
         System.out.println("paso");
 	JsonObject DatosOK=null; 	
  	JsonObject JsonNotFound=null;
@@ -104,6 +105,7 @@ public class AccountsServices {
                 System.out.println("validationid="+validationIdE);//+"\n originatorReferencedId:"+originatorReferencedIdE);
                  List<Object[]>cuentas=aco.setAccount(validationIdE);
                  String acountId="";
+                 System.out.println("Cuentas.size:"+cuentas.size());
                  if(cuentas!=null) {
     	
         	for(Object[] cu:cuentas){
@@ -149,16 +151,28 @@ public class AccountsServices {
     @Produces({MediaType.APPLICATION_JSON})
     @Consumes({MediaType.APPLICATION_JSON})
     public Response detailsAccount(String cadena) throws Throwable {
-	AccountsDAO aco=new AccountsDAO();
+	       System.out.println("aqui");
 	JsonObject DatosOK=null; 	
  	JsonObject JsonNotFound=null;
  	JsonObject JsonError=null;
-
-     try {
-    	JSONObject jsonEntrada=new JSONObject(cadena);
+       
+       	JSONObject jsonEntrada=new JSONObject(cadena);
 	    long accountIdE=jsonEntrada.getLong("accountId");
-	    List<Object[]>detalles_cuenta=aco.detailsAccount(accountIdE);
-       if(detalles_cuenta.size()>0) {
+            String accountId=String.valueOf(accountIdE);
+	    //List<Object[]>detalles_cuenta=aco.detailsAccount(accountIdE);
+            AccountsDAO aco=new AccountsDAO();
+            accountDTO cuenta=aco.detailsAccount(accountId);
+        try {
+            if(cuenta != null){
+                return Response.status(Response.Status.OK).entity(cuenta).build();
+            }
+            else{
+              JsonNotFound=Json.createObjectBuilder()
+        		                 .add("type", "urn:vn:error-codes:VAL00003")
+        	                                   .add("title","The requested object could not be found").build();
+              return Response.status(Response.Status.BAD_GATEWAY).entity(JsonNotFound).build();
+            }
+            /* if(detalles_cuenta.size()>0) {
         	for(Object[] de_cu:detalles_cuenta){
         		JsonObjectBuilder desc=Json.createObjectBuilder();
         		 DatosOK=desc
@@ -179,9 +193,10 @@ public class AccountsServices {
         	JsonNotFound=Json.createObjectBuilder()
         		                 .add("type", "urn:vn:error-codes:VAL00003")
         	                                   .add("title","The requested object could not be found").build();
-        	return Response.status(Response.Status.NOT_FOUND).entity(JsonNotFound.toString()).build();
-        }
+        	
+        }*/
     } catch (Exception e) {
+            System.out.println("");
 		  JsonError=Json.createObjectBuilder()
 				        .add("type"    , "urn:vn:error-codes:SE00002")
 				        .add("title"   , "Unexpected error")
@@ -189,10 +204,7 @@ public class AccountsServices {
 				        .build();
                    return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(JsonError.toString()).build();
 
-     }
-     finally {
-    	 aco.cerrar();
-     }      
+     }   
   } 
 	
 	

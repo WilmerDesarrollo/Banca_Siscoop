@@ -20,7 +20,7 @@ public class JPAUtil{
       String PU = "conexion";
     
     public EntityManagerFactory getEntityManagerFactory(String ip, String bd) {
-        
+        System.out.println("Ip:"+ip+", Base:"+bd);
         
         try {
         System.out.println("Lllego a jpa util");
@@ -30,19 +30,18 @@ public class JPAUtil{
         properties.put("hibernate.connection.url","jdbc:postgresql://"+ip+":5432/"+bd);
         properties.put("hibernate.connection.username",usuario);
         properties.put("hibernate.connection.password",pass);
-        properties.put("hibernate.dialect","org.hibernate.dialect.PostgreSQLDialect");
+        //properties.put("hibernate.dialect","org.hibernate.dialect.PostgreSQLDialect");
         properties.put("hibernate.archive.autodetection","class");
         properties.put("hibernate.show_sql","true");
         properties.put("hibernate.format_sql","true");
         properties.put("hbm2ddl.auto","update");
-        properties.put("hibernate.c3p0.min_size","5");
-        properties.put("hibernate.c3p0.max_size","30");
-        properties.put("hibernate.c3p0.timeout","200");
-        properties.put("hibernate.c3p0.max_statements","50");
-        properties.put("hibernate.c3p0.idle_test_period","3000");
-        EntityManagerFactory emf=Persistence.createEntityManagerFactory(PU,properties);    
-            System.out.println("Listo");
-         return emf;
+        properties.put("hibernate.c3p0.min_size","1");
+        properties.put("hibernate.c3p0.max_size","10");
+        properties.put("hibernate.c3p0.timeout","2");
+        properties.put("hibernate.c3p0.max_statements","5");
+        properties.put("hibernate.c3p0.idle_test_period","1000");
+        return Persistence.createEntityManagerFactory(PU,properties);   
+         
         } catch (Throwable e) {
             System.err.println("Error al conectar a la persistencia" + e.getMessage());
        

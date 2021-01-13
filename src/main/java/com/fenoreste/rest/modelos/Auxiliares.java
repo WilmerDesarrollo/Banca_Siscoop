@@ -1,743 +1,644 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package com.fenoreste.rest.modelos;
 
-
 import java.io.Serializable;
-import java.sql.Date;
-
+import java.math.BigDecimal;
+import java.util.Date;
+import javax.persistence.Cacheable;
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.xml.bind.annotation.XmlRootElement;
 
+/**
+ *
+ * @author gerardo
+ */
+@Cacheable(false)
 @Entity
-@Table(name="auxiliares")
-public class Auxiliares implements Serializable{
-	
-	private static final long SerialVersionUID=1L;
-	
-	@Id
-	@Column(name="idorigen")
-	private Integer idorigen;
-	@Column(name="idgrupo")
-	private Integer idgrupo;
-	@Column(name="idsocio")
-	private Integer idsocio;
-	@Column
-	private Integer idorigenp;
-	@Column
-	private Integer idproducto;
-	@Column 
-	private Integer idauxiliar;
-	@Column
-	private Date fechaape;
-	@Column
-	private Integer elaboro;
-	@Column 
-	private Integer autorizo;
-	@Column
-	private Integer estatus;
-	@Column
-	private Double tasaio;
-	@Column
-	private Double tasaim;
-	@Column 
-	private Double tasaiod;
-	@Column
-	private Double montosolicitado;
-	@Column 
-	private Double montoautorizado;
-	@Column 
-	private Double montoprestado;
-	@Column
-	private Integer idfinalidad;
-	@Column 
-	private Integer plazo;
-	@Column
-	private Double periodoabonos;
-	@Column
-	private Double saldoinicial;
-	@Column 
-	private Double saldo;
-	@Column
-	private Double io;
-	@Column
-	private Double idnc;
-	@Column 
-	private Double ieco;
-	@Column
-	private Double im;
-	@Column
-	private Double iva;
-	@Column
-	private Date fechaactivacion;
-	@Column 
-	private Date fechaumi;
-	@Column
-	private String idnotas;
-	@Column
-	private Integer tipoprestamo;
-	@Column
-	private String cartera;
-	@Column
-	private Double contaidnc;
-	@Column
-	private Double contaieco;
-	@Column 
-	private Double reservaidnc;
-	@Column
-	private Double reservacapital;
-	@Column
-	private Integer tipoamortizacion;
-	@Column
-	private Double saldodiacum;
-	@Column
-	private Date fechacartera;
-	@Column
-	private Date fechauma;
-	@Column
-	private Double ivaidnccal;
-	@Column
-	private Double ivaidncpag;
-	@Column
-	private Integer tiporeferencia;
-	@Column 
-	private Integer calificacion;
-	@Column
-	private Integer pagodiafijo;
-	@Column     
-    private Double  iodif              ;
-    @Column
-    private Double  garantia           ;
-    @Column
-    private Double  saldodiacummi      ;
-    @Column
-    private Double  comision           ;
-    @Column
-    private Date    fechasdiacum       ;
-    @Column
-    private Double  prc_comision       ;
-    @Column
-    private Double  sobreprecio        ;
-    @Column
-    private Double  comision_np        ;
-    @Column
-    private Boolean pagos_dia_ultimo   ;
-    @Column
-    private Integer tipo_dv            ;
-    @Column
-    private Date    fecha_solicitud    ;
-    @Column
-    private Date    fecha_autorizacion ;
-    @Column
-    private Double  idncm              ;
-    @Column
-    private Double  iecom              ;
-    @Column
-    private Double  reservaidncm       ;
-    @Column
-    private Double  tasa_cat_gat       ;
-    @Column
-    private Double  retencion          ;
-	
-	public Auxiliares() {
-	
-	}
-
-	public Auxiliares(Integer idorigen, Integer idgrupo, Integer idsocio, Integer idorigenp, Integer idproducto,
-			Integer idauxiliar, Date fechaape, Integer elaboro, Integer autorizo, Integer estatus, Double tasaio,
-			Double tasaim, Double tasaiod, Double montosolicitado, Double montoautorizado, Double montoprestado,
-			Integer idfinalidad, Integer plazo, Double periodoabonos, Double saldoinicial, Double saldo, Double io,
-			Double idnc, Double ieco, Double im, Double iva, Date fechaactivacion, Date fechaumi, String idnotas,
-			Integer tipoprestamo, String cartera, Double contaidnc, Double contaieco, Double reservaidnc,
-			Double reservacapital, Integer tipoamortizacion, Double saldodiacum, Date fechacartera, Date fechauma,
-			Double ivaidnccal, Double ivaidncpag, Integer tiporeferencia, Integer calificacion, Integer pagodiafijo,
-			Double iodif, Double garantia, Double saldodiacummi, Double comision, Date fechasdiacum,
-			Double prc_comision, Double sobreprecio, Double comision_np, Boolean pagos_dia_ultimo, Integer tipo_dv,
-			Date fecha_solicitud, Date fecha_autorizacion, Double idncm, Double iecom, Double reservaidncm,
-			Double tasa_cat_gat, Double retencion) {
-		this.idorigen = idorigen;
-		this.idgrupo = idgrupo;
-		this.idsocio = idsocio;
-		this.idorigenp = idorigenp;
-		this.idproducto = idproducto;
-		this.idauxiliar = idauxiliar;
-		this.fechaape = fechaape;
-		this.elaboro = elaboro;
-		this.autorizo = autorizo;
-		this.estatus = estatus;
-		this.tasaio = tasaio;
-		this.tasaim = tasaim;
-		this.tasaiod = tasaiod;
-		this.montosolicitado = montosolicitado;
-		this.montoautorizado = montoautorizado;
-		this.montoprestado = montoprestado;
-		this.idfinalidad = idfinalidad;
-		this.plazo = plazo;
-		this.periodoabonos = periodoabonos;
-		this.saldoinicial = saldoinicial;
-		this.saldo = saldo;
-		this.io = io;
-		this.idnc = idnc;
-		this.ieco = ieco;
-		this.im = im;
-		this.iva = iva;
-		this.fechaactivacion = fechaactivacion;
-		this.fechaumi = fechaumi;
-		this.idnotas = idnotas;
-		this.tipoprestamo = tipoprestamo;
-		this.cartera = cartera;
-		this.contaidnc = contaidnc;
-		this.contaieco = contaieco;
-		this.reservaidnc = reservaidnc;
-		this.reservacapital = reservacapital;
-		this.tipoamortizacion = tipoamortizacion;
-		this.saldodiacum = saldodiacum;
-		this.fechacartera = fechacartera;
-		this.fechauma = fechauma;
-		this.ivaidnccal = ivaidnccal;
-		this.ivaidncpag = ivaidncpag;
-		this.tiporeferencia = tiporeferencia;
-		this.calificacion = calificacion;
-		this.pagodiafijo = pagodiafijo;
-		this.iodif = iodif;
-		this.garantia = garantia;
-		this.saldodiacummi = saldodiacummi;
-		this.comision = comision;
-		this.fechasdiacum = fechasdiacum;
-		this.prc_comision = prc_comision;
-		this.sobreprecio = sobreprecio;
-		this.comision_np = comision_np;
-		this.pagos_dia_ultimo = pagos_dia_ultimo;
-		this.tipo_dv = tipo_dv;
-		this.fecha_solicitud = fecha_solicitud;
-		this.fecha_autorizacion = fecha_autorizacion;
-		this.idncm = idncm;
-		this.iecom = iecom;
-		this.reservaidncm = reservaidncm;
-		this.tasa_cat_gat = tasa_cat_gat;
-		this.retencion = retencion;
-	}
-
-	public Integer getIdorigen() {
-		return idorigen;
-	}
-
-	public void setIdorigen(Integer idorigen) {
-		this.idorigen = idorigen;
-	}
-
-	public Integer getIdgrupo() {
-		return idgrupo;
-	}
-
-	public void setIdgrupo(Integer idgrupo) {
-		this.idgrupo = idgrupo;
-	}
-
-	public Integer getIdsocio() {
-		return idsocio;
-	}
-
-	public void setIdsocio(Integer idsocio) {
-		this.idsocio = idsocio;
-	}
-
-	public Integer getIdorigenp() {
-		return idorigenp;
-	}
-
-	public void setIdorigenp(Integer idorigenp) {
-		this.idorigenp = idorigenp;
-	}
-
-	public Integer getIdproducto() {
-		return idproducto;
-	}
-
-	public void setIdproducto(Integer idproducto) {
-		this.idproducto = idproducto;
-	}
-
-	public Integer getIdauxiliar() {
-		return idauxiliar;
-	}
-
-	public void setIdauxiliar(Integer idauxiliar) {
-		this.idauxiliar = idauxiliar;
-	}
-
-	public Date getFechaape() {
-		return fechaape;
-	}
-
-	public void setFechaape(Date fechaape) {
-		this.fechaape = fechaape;
-	}
-
-	public Integer getElaboro() {
-		return elaboro;
-	}
-
-	public void setElaboro(Integer elaboro) {
-		this.elaboro = elaboro;
-	}
-
-	public Integer getAutorizo() {
-		return autorizo;
-	}
-
-	public void setAutorizo(Integer autorizo) {
-		this.autorizo = autorizo;
-	}
-
-	public Integer getEstatus() {
-		return estatus;
-	}
-
-	public void setEstatus(Integer estatus) {
-		this.estatus = estatus;
-	}
-
-	public Double getTasaio() {
-		return tasaio;
-	}
-
-	public void setTasaio(Double tasaio) {
-		this.tasaio = tasaio;
-	}
-
-	public Double getTasaim() {
-		return tasaim;
-	}
-
-	public void setTasaim(Double tasaim) {
-		this.tasaim = tasaim;
-	}
-
-	public Double getTasaiod() {
-		return tasaiod;
-	}
-
-	public void setTasaiod(Double tasaiod) {
-		this.tasaiod = tasaiod;
-	}
-
-	public Double getMontosolicitado() {
-		return montosolicitado;
-	}
-
-	public void setMontosolicitado(Double montosolicitado) {
-		this.montosolicitado = montosolicitado;
-	}
-
-	public Double getMontoautorizado() {
-		return montoautorizado;
-	}
-
-	public void setMontoautorizado(Double montoautorizado) {
-		this.montoautorizado = montoautorizado;
-	}
-
-	public Double getMontoprestado() {
-		return montoprestado;
-	}
-
-	public void setMontoprestado(Double montoprestado) {
-		this.montoprestado = montoprestado;
-	}
-
-	public Integer getIdfinalidad() {
-		return idfinalidad;
-	}
-
-	public void setIdfinalidad(Integer idfinalidad) {
-		this.idfinalidad = idfinalidad;
-	}
-
-	public Integer getPlazo() {
-		return plazo;
-	}
-
-	public void setPlazo(Integer plazo) {
-		this.plazo = plazo;
-	}
-
-	public Double getPeriodoabonos() {
-		return periodoabonos;
-	}
-
-	public void setPeriodoabonos(Double periodoabonos) {
-		this.periodoabonos = periodoabonos;
-	}
-
-	public Double getSaldoinicial() {
-		return saldoinicial;
-	}
-
-	public void setSaldoinicial(Double saldoinicial) {
-		this.saldoinicial = saldoinicial;
-	}
-
-	public Double getSaldo() {
-		return saldo;
-	}
-
-	public void setSaldo(Double saldo) {
-		this.saldo = saldo;
-	}
-
-	public Double getIo() {
-		return io;
-	}
-
-	public void setIo(Double io) {
-		this.io = io;
-	}
-
-	public Double getIdnc() {
-		return idnc;
-	}
-
-	public void setIdnc(Double idnc) {
-		this.idnc = idnc;
-	}
-
-	public Double getIeco() {
-		return ieco;
-	}
-
-	public void setIeco(Double ieco) {
-		this.ieco = ieco;
-	}
-
-	public Double getIm() {
-		return im;
-	}
-
-	public void setIm(Double im) {
-		this.im = im;
-	}
-
-	public Double getIva() {
-		return iva;
-	}
-
-	public void setIva(Double iva) {
-		this.iva = iva;
-	}
-
-	public Date getFechaactivacion() {
-		return fechaactivacion;
-	}
-
-	public void setFechaactivacion(Date fechaactivacion) {
-		this.fechaactivacion = fechaactivacion;
-	}
-
-	public Date getFechaumi() {
-		return fechaumi;
-	}
-
-	public void setFechaumi(Date fechaumi) {
-		this.fechaumi = fechaumi;
-	}
-
-	public String getIdnotas() {
-		return idnotas;
-	}
-
-	public void setIdnotas(String idnotas) {
-		this.idnotas = idnotas;
-	}
-
-	public Integer getTipoprestamo() {
-		return tipoprestamo;
-	}
-
-	public void setTipoprestamo(Integer tipoprestamo) {
-		this.tipoprestamo = tipoprestamo;
-	}
-
-	public String getCartera() {
-		return cartera;
-	}
-
-	public void setCartera(String cartera) {
-		this.cartera = cartera;
-	}
-
-	public Double getContaidnc() {
-		return contaidnc;
-	}
-
-	public void setContaidnc(Double contaidnc) {
-		this.contaidnc = contaidnc;
-	}
-
-	public Double getContaieco() {
-		return contaieco;
-	}
-
-	public void setContaieco(Double contaieco) {
-		this.contaieco = contaieco;
-	}
-
-	public Double getReservaidnc() {
-		return reservaidnc;
-	}
-
-	public void setReservaidnc(Double reservaidnc) {
-		this.reservaidnc = reservaidnc;
-	}
-
-	public Double getReservacapital() {
-		return reservacapital;
-	}
-
-	public void setReservacapital(Double reservacapital) {
-		this.reservacapital = reservacapital;
-	}
-
-	public Integer getTipoamortizacion() {
-		return tipoamortizacion;
-	}
-
-	public void setTipoamortizacion(Integer tipoamortizacion) {
-		this.tipoamortizacion = tipoamortizacion;
-	}
-
-	public Double getSaldodiacum() {
-		return saldodiacum;
-	}
-
-	public void setSaldodiacum(Double saldodiacum) {
-		this.saldodiacum = saldodiacum;
-	}
-
-	public Date getFechacartera() {
-		return fechacartera;
-	}
-
-	public void setFechacartera(Date fechacartera) {
-		this.fechacartera = fechacartera;
-	}
-
-	public Date getFechauma() {
-		return fechauma;
-	}
-
-	public void setFechauma(Date fechauma) {
-		this.fechauma = fechauma;
-	}
-
-	public Double getIvaidnccal() {
-		return ivaidnccal;
-	}
-
-	public void setIvaidnccal(Double ivaidnccal) {
-		this.ivaidnccal = ivaidnccal;
-	}
-
-	public Double getIvaidncpag() {
-		return ivaidncpag;
-	}
-
-	public void setIvaidncpag(Double ivaidncpag) {
-		this.ivaidncpag = ivaidncpag;
-	}
-
-	public Integer getTiporeferencia() {
-		return tiporeferencia;
-	}
-
-	public void setTiporeferencia(Integer tiporeferencia) {
-		this.tiporeferencia = tiporeferencia;
-	}
-
-	public Integer getCalificacion() {
-		return calificacion;
-	}
-
-	public void setCalificacion(Integer calificacion) {
-		this.calificacion = calificacion;
-	}
-
-	public Integer getPagodiafijo() {
-		return pagodiafijo;
-	}
-
-	public void setPagodiafijo(Integer pagodiafijo) {
-		this.pagodiafijo = pagodiafijo;
-	}
-
-	public Double getIodif() {
-		return iodif;
-	}
-
-	public void setIodif(Double iodif) {
-		this.iodif = iodif;
-	}
-
-	public Double getGarantia() {
-		return garantia;
-	}
-
-	public void setGarantia(Double garantia) {
-		this.garantia = garantia;
-	}
-
-	public Double getSaldodiacummi() {
-		return saldodiacummi;
-	}
-
-	public void setSaldodiacummi(Double saldodiacummi) {
-		this.saldodiacummi = saldodiacummi;
-	}
-
-	public Double getComision() {
-		return comision;
-	}
-
-	public void setComision(Double comision) {
-		this.comision = comision;
-	}
-
-	public Date getFechasdiacum() {
-		return fechasdiacum;
-	}
-
-	public void setFechasdiacum(Date fechasdiacum) {
-		this.fechasdiacum = fechasdiacum;
-	}
-
-	public Double getPrc_comision() {
-		return prc_comision;
-	}
-
-	public void setPrc_comision(Double prc_comision) {
-		this.prc_comision = prc_comision;
-	}
-
-	public Double getSobreprecio() {
-		return sobreprecio;
-	}
-
-	public void setSobreprecio(Double sobreprecio) {
-		this.sobreprecio = sobreprecio;
-	}
-
-	public Double getComision_np() {
-		return comision_np;
-	}
-
-	public void setComision_np(Double comision_np) {
-		this.comision_np = comision_np;
-	}
-
-	public Boolean getPagos_dia_ultimo() {
-		return pagos_dia_ultimo;
-	}
-
-	public void setPagos_dia_ultimo(Boolean pagos_dia_ultimo) {
-		this.pagos_dia_ultimo = pagos_dia_ultimo;
-	}
-
-	public Integer getTipo_dv() {
-		return tipo_dv;
-	}
-
-	public void setTipo_dv(Integer tipo_dv) {
-		this.tipo_dv = tipo_dv;
-	}
-
-	public Date getFecha_solicitud() {
-		return fecha_solicitud;
-	}
-
-	public void setFecha_solicitud(Date fecha_solicitud) {
-		this.fecha_solicitud = fecha_solicitud;
-	}
-
-	public Date getFecha_autorizacion() {
-		return fecha_autorizacion;
-	}
-
-	public void setFecha_autorizacion(Date fecha_autorizacion) {
-		this.fecha_autorizacion = fecha_autorizacion;
-	}
-
-	public Double getIdncm() {
-		return idncm;
-	}
-
-	public void setIdncm(Double idncm) {
-		this.idncm = idncm;
-	}
-
-	public Double getIecom() {
-		return iecom;
-	}
-
-	public void setIecom(Double iecom) {
-		this.iecom = iecom;
-	}
-
-	public Double getReservaidncm() {
-		return reservaidncm;
-	}
-
-	public void setReservaidncm(Double reservaidncm) {
-		this.reservaidncm = reservaidncm;
-	}
-
-	public Double getTasa_cat_gat() {
-		return tasa_cat_gat;
-	}
-
-	public void setTasa_cat_gat(Double tasa_cat_gat) {
-		this.tasa_cat_gat = tasa_cat_gat;
-	}
-
-	public Double getRetencion() {
-		return retencion;
-	}
-
-	public void setRetencion(Double retencion) {
-		this.retencion = retencion;
-	}
-
-	public static long getSerialversionuid() {
-		return SerialVersionUID;
-	}
-
-	@Override
-	public String toString() {
-		return "Auxiliares [idorigen=" + idorigen + ", idgrupo=" + idgrupo + ", idsocio=" + idsocio + ", idorigenp="
-				+ idorigenp + ", idproducto=" + idproducto + ", idauxiliar=" + idauxiliar + ", fechaape=" + fechaape
-				+ ", elaboro=" + elaboro + ", autorizo=" + autorizo + ", estatus=" + estatus + ", tasaio=" + tasaio
-				+ ", tasaim=" + tasaim + ", tasaiod=" + tasaiod + ", montosolicitado=" + montosolicitado
-				+ ", montoautorizado=" + montoautorizado + ", montoprestado=" + montoprestado + ", idfinalidad="
-				+ idfinalidad + ", plazo=" + plazo + ", periodoabonos=" + periodoabonos + ", saldoinicial="
-				+ saldoinicial + ", saldo=" + saldo + ", io=" + io + ", idnc=" + idnc + ", ieco=" + ieco + ", im=" + im
-				+ ", iva=" + iva + ", fechaactivacion=" + fechaactivacion + ", fechaumi=" + fechaumi + ", idnotas="
-				+ idnotas + ", tipoprestamo=" + tipoprestamo + ", cartera=" + cartera + ", contaidnc=" + contaidnc
-				+ ", contaieco=" + contaieco + ", reservaidnc=" + reservaidnc + ", reservacapital=" + reservacapital
-				+ ", tipoamortizacion=" + tipoamortizacion + ", saldodiacum=" + saldodiacum + ", fechacartera="
-				+ fechacartera + ", fechauma=" + fechauma + ", ivaidnccal=" + ivaidnccal + ", ivaidncpag=" + ivaidncpag
-				+ ", tiporeferencia=" + tiporeferencia + ", calificacion=" + calificacion + ", pagodiafijo="
-				+ pagodiafijo + ", iodif=" + iodif + ", garantia=" + garantia + ", saldodiacummi=" + saldodiacummi
-				+ ", comision=" + comision + ", fechasdiacum=" + fechasdiacum + ", prc_comision=" + prc_comision
-				+ ", sobreprecio=" + sobreprecio + ", comision_np=" + comision_np + ", pagos_dia_ultimo="
-				+ pagos_dia_ultimo + ", tipo_dv=" + tipo_dv + ", fecha_solicitud=" + fecha_solicitud
-				+ ", fecha_autorizacion=" + fecha_autorizacion + ", idncm=" + idncm + ", iecom=" + iecom
-				+ ", reservaidncm=" + reservaidncm + ", tasa_cat_gat=" + tasa_cat_gat + ", retencion=" + retencion
-				+ "]";
-	}
-	
-	
-	
-	
-	
-	
-	
+@Table(name = "auxiliares")
+@XmlRootElement
+public class Auxiliares implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    @Column(name = "idorigen")
+    private Integer idorigen;
+    @Column(name = "idgrupo")
+    private Integer idgrupo;
+    @Column(name = "idsocio")
+    private Integer idsocio;
+    @EmbeddedId
+    protected AuxiliaresPK auxiliaresPK;
+    @Column(name = "fechaape")
+    @Temporal(TemporalType.DATE)
+    private Date fechaape;
+    @Column(name = "elaboro")
+    private Integer elaboro;
+    @Column(name = "autorizo")
+    private Integer autorizo;
+    @Column(name = "estatus")
+    private Short estatus;
+    @Column(name = "tasaio")
+    private BigDecimal tasaio;
+    @Column(name = "tasaim")
+    private BigDecimal tasaim;
+    @Column(name = "tasaiod")
+    private BigDecimal tasaiod;
+    @Column(name = "montosolicitado")
+    private BigDecimal montosolicitado;
+    @Column(name = "montoautorizado")
+    private BigDecimal montoautorizado;
+    @Column(name = "montoprestado")
+    private BigDecimal montoprestado;
+    @Column(name = "idfinalidad")
+    private Integer idfinalidad;
+    @Column(name = "plazo")
+    private short plazo;
+    @Column(name = "periodoabonos")
+    private short periodoabonos;
+    @Column(name = "saldoinicial")
+    private BigDecimal saldoinicial;
+    @Column(name = "saldo")
+    private BigDecimal saldo;
+    @Column(name = "io")
+    private BigDecimal io;
+    @Column(name = "idnc")
+    private BigDecimal idnc;
+    @Column(name = "ieco")
+    private BigDecimal ieco;
+    @Column(name = "im")
+    private BigDecimal im;
+    @Column(name = "iva")
+    private BigDecimal iva;
+    @Column(name = "fechaactivacion")
+    @Temporal(TemporalType.DATE)
+    private Date fechaactivacion;
+    @Column(name = "fechaumi")
+    @Temporal(TemporalType.DATE)
+    private Date fechaumi;
+    @Column(name = "idnotas")
+    private String idnotas;
+    @Column(name = "tipoprestamo")
+    private short tipoprestamo;
+    @Column(name = "cartera")
+    private String cartera;
+    @Column(name = "contaidnc")
+    private BigDecimal contaidnc;
+    @Column(name = "contaieco")
+    private BigDecimal contaieco;
+    @Column(name = "reservaidnc")
+    private BigDecimal reservaidnc;
+    @Column(name = "reservacapital")
+    private BigDecimal reservacapital;
+    @Column(name = "tipoamortizacion")
+    private Short tipoamortizacion;
+    @Column(name = "saldodiacum")
+    private BigDecimal saldodiacum;
+    @Column(name = "fechacartera")
+    @Temporal(TemporalType.DATE)
+    private Date fechacartera;
+    @Column(name = "fechauma")
+    @Temporal(TemporalType.DATE)
+    private Date fechauma;
+    @Column(name = "ivaidnccalc")
+    private BigDecimal ivaidnccalc;
+    @Column(name = "ivaidncpag")
+    private BigDecimal ivaidncpag;
+    @Column(name = "tiporeferencia")
+    private Short tiporeferencia;
+    @Column(name = "calificacion")
+    private Integer calificacion;
+    @Column(name = "pagodiafijo")
+    private Short pagodiafijo;
+    @Column(name = "iodif")
+    private BigDecimal iodif;
+    @Column(name = "garantia")
+    private BigDecimal garantia;
+    @Column(name = "saldodiacummi")
+    private BigDecimal saldodiacummi;
+    @Column(name = "comision")
+    private BigDecimal comision;
+    @Column(name = "fechasdiacum")
+    @Temporal(TemporalType.DATE)
+    private Date fechasdiacum;
+    @Column(name = "prc_comision")
+    private BigDecimal prcComision;
+    @Column(name = "sobreprecio")
+    private BigDecimal sobreprecio;
+    @Column(name = "comision_np")
+    private BigDecimal comisionNp;
+    @Column(name = "pagos_dia_ultimo")
+    private Boolean pagosDiaUltimo;
+    @Column(name = "tipo_dv")
+    private Integer tipoDv;
+    @Column(name = "fecha_solicitud")
+    @Temporal(TemporalType.DATE)
+    private Date fechaSolicitud;
+    @Column(name = "fecha_autorizacion")
+    @Temporal(TemporalType.DATE)
+    private Date fechaAutorizacion;
+    @Column(name = "idncm")
+    private BigDecimal idncm;
+    @Column(name = "iecom")
+    private BigDecimal iecom;
+    @Column(name = "reservaidncm")
+    private BigDecimal reservaidncm;
+
+    public Auxiliares() {
+    }
+
+    public Auxiliares(AuxiliaresPK auxiliaresPK) {
+        this.auxiliaresPK = auxiliaresPK;
+    }
+
+    public Auxiliares(int idorigenp, int idproducto, int idauxiliar) {
+        this.auxiliaresPK = new AuxiliaresPK(idorigenp, idproducto, idauxiliar);
+    }
+
+    public int getIdorigen() {
+        return idorigen;
+    }
+
+    public void setIdorigen(int idorigen) {
+        this.idorigen = idorigen;
+    }
+
+    public int getIdgrupo() {
+        return idgrupo;
+    }
+
+    public void setIdgrupo(int idgrupo) {
+        this.idgrupo = idgrupo;
+    }
+
+    public int getIdsocio() {
+        return idsocio;
+    }
+
+    public void setIdsocio(int idsocio) {
+        this.idsocio = idsocio;
+    }
+
+    public AuxiliaresPK getAuxiliaresPK() {
+        return auxiliaresPK;
+    }
+
+    public void setAuxiliaresPK(AuxiliaresPK auxiliaresPK) {
+        this.auxiliaresPK = auxiliaresPK;
+    }
+
+    public Date getFechaape() {
+        return fechaape;
+    }
+
+    public void setFechaape(Date fechaape) {
+        this.fechaape = fechaape;
+    }
+
+    public Integer getElaboro() {
+        return elaboro;
+    }
+
+    public void setElaboro(Integer elaboro) {
+        this.elaboro = elaboro;
+    }
+
+    public Integer getAutorizo() {
+        return autorizo;
+    }
+
+    public void setAutorizo(Integer autorizo) {
+        this.autorizo = autorizo;
+    }
+
+    public Short getEstatus() {
+        return estatus;
+    }
+
+    public void setEstatus(Short estatus) {
+        this.estatus = estatus;
+    }
+
+    public BigDecimal getTasaio() {
+        return tasaio;
+    }
+
+    public void setTasaio(BigDecimal tasaio) {
+        this.tasaio = tasaio;
+    }
+
+    public BigDecimal getTasaim() {
+        return tasaim;
+    }
+
+    public void setTasaim(BigDecimal tasaim) {
+        this.tasaim = tasaim;
+    }
+
+    public BigDecimal getTasaiod() {
+        return tasaiod;
+    }
+
+    public void setTasaiod(BigDecimal tasaiod) {
+        this.tasaiod = tasaiod;
+    }
+
+    public BigDecimal getMontosolicitado() {
+        return montosolicitado;
+    }
+
+    public void setMontosolicitado(BigDecimal montosolicitado) {
+        this.montosolicitado = montosolicitado;
+    }
+
+    public BigDecimal getMontoautorizado() {
+        return montoautorizado;
+    }
+
+    public void setMontoautorizado(BigDecimal montoautorizado) {
+        this.montoautorizado = montoautorizado;
+    }
+
+    public BigDecimal getMontoprestado() {
+        return montoprestado;
+    }
+
+    public void setMontoprestado(BigDecimal montoprestado) {
+        this.montoprestado = montoprestado;
+    }
+
+    public Integer getIdfinalidad() {
+        return idfinalidad;
+    }
+
+    public void setIdfinalidad(Integer idfinalidad) {
+        this.idfinalidad = idfinalidad;
+    }
+
+    public short getPlazo() {
+        return plazo;
+    }
+
+    public void setPlazo(short plazo) {
+        this.plazo = plazo;
+    }
+
+    public short getPeriodoabonos() {
+        return periodoabonos;
+    }
+
+    public void setPeriodoabonos(short periodoabonos) {
+        this.periodoabonos = periodoabonos;
+    }
+
+    public BigDecimal getSaldoinicial() {
+        return saldoinicial;
+    }
+
+    public void setSaldoinicial(BigDecimal saldoinicial) {
+        this.saldoinicial = saldoinicial;
+    }
+
+    public BigDecimal getSaldo() {
+        return saldo;
+    }
+
+    public void setSaldo(BigDecimal saldo) {
+        this.saldo = saldo;
+    }
+
+    public BigDecimal getIo() {
+        return io;
+    }
+
+    public void setIo(BigDecimal io) {
+        this.io = io;
+    }
+
+    public BigDecimal getIdnc() {
+        return idnc;
+    }
+
+    public void setIdnc(BigDecimal idnc) {
+        this.idnc = idnc;
+    }
+
+    public BigDecimal getIeco() {
+        return ieco;
+    }
+
+    public void setIeco(BigDecimal ieco) {
+        this.ieco = ieco;
+    }
+
+    public BigDecimal getIm() {
+        return im;
+    }
+
+    public void setIm(BigDecimal im) {
+        this.im = im;
+    }
+
+    public BigDecimal getIva() {
+        return iva;
+    }
+
+    public void setIva(BigDecimal iva) {
+        this.iva = iva;
+    }
+
+    public Date getFechaactivacion() {
+        return fechaactivacion;
+    }
+
+    public void setFechaactivacion(Date fechaactivacion) {
+        this.fechaactivacion = fechaactivacion;
+    }
+
+    public Date getFechaumi() {
+        return fechaumi;
+    }
+
+    public void setFechaumi(Date fechaumi) {
+        this.fechaumi = fechaumi;
+    }
+
+    public String getIdnotas() {
+        return idnotas;
+    }
+
+    public void setIdnotas(String idnotas) {
+        this.idnotas = idnotas;
+    }
+
+    public short getTipoprestamo() {
+        return tipoprestamo;
+    }
+
+    public void setTipoprestamo(short tipoprestamo) {
+        this.tipoprestamo = tipoprestamo;
+    }
+
+    public String getCartera() {
+        return cartera;
+    }
+
+    public void setCartera(String cartera) {
+        this.cartera = cartera;
+    }
+
+    public BigDecimal getContaidnc() {
+        return contaidnc;
+    }
+
+    public void setContaidnc(BigDecimal contaidnc) {
+        this.contaidnc = contaidnc;
+    }
+
+    public BigDecimal getContaieco() {
+        return contaieco;
+    }
+
+    public void setContaieco(BigDecimal contaieco) {
+        this.contaieco = contaieco;
+    }
+
+    public BigDecimal getReservaidnc() {
+        return reservaidnc;
+    }
+
+    public void setReservaidnc(BigDecimal reservaidnc) {
+        this.reservaidnc = reservaidnc;
+    }
+
+    public BigDecimal getReservacapital() {
+        return reservacapital;
+    }
+
+    public void setReservacapital(BigDecimal reservacapital) {
+        this.reservacapital = reservacapital;
+    }
+
+    public Short getTipoamortizacion() {
+        return tipoamortizacion;
+    }
+
+    public void setTipoamortizacion(Short tipoamortizacion) {
+        this.tipoamortizacion = tipoamortizacion;
+    }
+
+    public BigDecimal getSaldodiacum() {
+        return saldodiacum;
+    }
+
+    public void setSaldodiacum(BigDecimal saldodiacum) {
+        this.saldodiacum = saldodiacum;
+    }
+
+    public Date getFechacartera() {
+        return fechacartera;
+    }
+
+    public void setFechacartera(Date fechacartera) {
+        this.fechacartera = fechacartera;
+    }
+
+    public Date getFechauma() {
+        return fechauma;
+    }
+
+    public void setFechauma(Date fechauma) {
+        this.fechauma = fechauma;
+    }
+
+    public BigDecimal getIvaidnccalc() {
+        return ivaidnccalc;
+    }
+
+    public void setIvaidnccalc(BigDecimal ivaidnccalc) {
+        this.ivaidnccalc = ivaidnccalc;
+    }
+
+    public BigDecimal getIvaidncpag() {
+        return ivaidncpag;
+    }
+
+    public void setIvaidncpag(BigDecimal ivaidncpag) {
+        this.ivaidncpag = ivaidncpag;
+    }
+
+    public Short getTiporeferencia() {
+        return tiporeferencia;
+    }
+
+    public void setTiporeferencia(Short tiporeferencia) {
+        this.tiporeferencia = tiporeferencia;
+    }
+
+    public Integer getCalificacion() {
+        return calificacion;
+    }
+
+    public void setCalificacion(Integer calificacion) {
+        this.calificacion = calificacion;
+    }
+
+    public Short getPagodiafijo() {
+        return pagodiafijo;
+    }
+
+    public void setPagodiafijo(Short pagodiafijo) {
+        this.pagodiafijo = pagodiafijo;
+    }
+
+    public BigDecimal getIodif() {
+        return iodif;
+    }
+
+    public void setIodif(BigDecimal iodif) {
+        this.iodif = iodif;
+    }
+
+    public BigDecimal getGarantia() {
+        return garantia;
+    }
+
+    public void setGarantia(BigDecimal garantia) {
+        this.garantia = garantia;
+    }
+
+    public BigDecimal getSaldodiacummi() {
+        return saldodiacummi;
+    }
+
+    public void setSaldodiacummi(BigDecimal saldodiacummi) {
+        this.saldodiacummi = saldodiacummi;
+    }
+
+    public BigDecimal getComision() {
+        return comision;
+    }
+
+    public void setComision(BigDecimal comision) {
+        this.comision = comision;
+    }
+
+    public Date getFechasdiacum() {
+        return fechasdiacum;
+    }
+
+    public void setFechasdiacum(Date fechasdiacum) {
+        this.fechasdiacum = fechasdiacum;
+    }
+
+    public BigDecimal getPrcComision() {
+        return prcComision;
+    }
+
+    public void setPrcComision(BigDecimal prcComision) {
+        this.prcComision = prcComision;
+    }
+
+    public BigDecimal getSobreprecio() {
+        return sobreprecio;
+    }
+
+    public void setSobreprecio(BigDecimal sobreprecio) {
+        this.sobreprecio = sobreprecio;
+    }
+
+    public BigDecimal getComisionNp() {
+        return comisionNp;
+    }
+
+    public void setComisionNp(BigDecimal comisionNp) {
+        this.comisionNp = comisionNp;
+    }
+
+    public Boolean getPagosDiaUltimo() {
+        return pagosDiaUltimo;
+    }
+
+    public void setPagosDiaUltimo(Boolean pagosDiaUltimo) {
+        this.pagosDiaUltimo = pagosDiaUltimo;
+    }
+
+    public Integer getTipoDv() {
+        return tipoDv;
+    }
+
+    public void setTipoDv(Integer tipoDv) {
+        this.tipoDv = tipoDv;
+    }
+
+    public Date getFechaSolicitud() {
+        return fechaSolicitud;
+    }
+
+    public void setFechaSolicitud(Date fechaSolicitud) {
+        this.fechaSolicitud = fechaSolicitud;
+    }
+
+    public Date getFechaAutorizacion() {
+        return fechaAutorizacion;
+    }
+
+    public void setFechaAutorizacion(Date fechaAutorizacion) {
+        this.fechaAutorizacion = fechaAutorizacion;
+    }
+
+    public BigDecimal getIdncm() {
+        return idncm;
+    }
+
+    public void setIdncm(BigDecimal idncm) {
+        this.idncm = idncm;
+    }
+
+    public BigDecimal getIecom() {
+        return iecom;
+    }
+
+    public void setIecom(BigDecimal iecom) {
+        this.iecom = iecom;
+    }
+
+    public BigDecimal getReservaidncm() {
+        return reservaidncm;
+    }
+
+    public void setReservaidncm(BigDecimal reservaidncm) {
+        this.reservaidncm = reservaidncm;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (auxiliaresPK != null ? auxiliaresPK.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Auxiliares)) {
+            return false;
+        }
+        Auxiliares other = (Auxiliares) object;
+        return !((this.auxiliaresPK == null && other.auxiliaresPK != null) || (this.auxiliaresPK != null && !this.auxiliaresPK.equals(other.auxiliaresPK)));
+    }
+
+    @Override
+    public String toString() {
+        return "com.fenoreste.modelo.entidad.Auxiliares[ auxiliaresPK=" + auxiliaresPK + " ]";
+    }
+
 }
