@@ -6,8 +6,8 @@
 package com.siscoop.dto;
 
 import com.fenoreste.rest.impl.AbstractFacade;
-import com.fenoreste.rest.modelos.Persona;
-import com.fenoreste.rest.modelos.PersonasPK;
+import com.fenoreste.rest.modelos.entidad.Persona;
+import com.fenoreste.rest.modelos.entidad.PersonasPK;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 

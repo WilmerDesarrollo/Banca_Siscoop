@@ -25,21 +25,12 @@ public class JPAUtil{
         try {
         System.out.println("Lllego a jpa util");
         Properties properties = new Properties();
-        properties.put("hibernate.jdbc.use_get_generated_keys" ,"false");
+        properties.put("hibernate.jdbc.use_get_generated_keys","true");
+        properties.put("hibernate.temp.use_jdbc_metadata_defaults","false");
         properties.put("hibernate.connection.driver_class","org.postgresql.Driver");
         properties.put("hibernate.connection.url","jdbc:postgresql://"+ip+":5432/"+bd);
         properties.put("hibernate.connection.username",usuario);
         properties.put("hibernate.connection.password",pass);
-        //properties.put("hibernate.dialect","org.hibernate.dialect.PostgreSQLDialect");
-        properties.put("hibernate.archive.autodetection","class");
-        properties.put("hibernate.show_sql","true");
-        properties.put("hibernate.format_sql","true");
-        properties.put("hbm2ddl.auto","update");
-        properties.put("hibernate.c3p0.min_size","1");
-        properties.put("hibernate.c3p0.max_size","10");
-        properties.put("hibernate.c3p0.timeout","2");
-        properties.put("hibernate.c3p0.max_statements","5");
-        properties.put("hibernate.c3p0.idle_test_period","1000");
         return Persistence.createEntityManagerFactory(PU,properties);   
          
         } catch (Throwable e) {

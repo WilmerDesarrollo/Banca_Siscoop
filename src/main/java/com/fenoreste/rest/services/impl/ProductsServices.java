@@ -15,7 +15,6 @@ import javax.ws.rs.core.Response;
 import org.codehaus.jettison.json.JSONObject;
 
 import com.fenoreste.rest.dao.ProductsDAO;
-import com.sun.research.ws.wadl.Request;
 
 
 

@@ -1,5 +1,5 @@
 
-import com.fenoreste.rest.modelos.Productos;
+import com.fenoreste.rest.modelos.entidad.Productos;
 import java.util.Properties;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;

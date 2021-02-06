@@ -2,22 +2,25 @@ package com.fenoreste.rest.services.impl;
 
 import com.fenoreste.rest.dao.CustomerDAO;
 import com.fenoreste.rest.dao.FacadeCustomer;
-import com.fenoreste.rest.modelos.Persona;
-import com.siscoop.dto.customerDTO;
-import java.math.BigDecimal;
-import java.util.ArrayList;
+import com.fenoreste.rest.dto.siscoop.CustomerAccountDTO;
+import com.fenoreste.rest.dto.siscoop.CustomerContactDetails;
+import com.fenoreste.rest.dto.siscoop.CustomerDetailsDTO;
+import com.fenoreste.rest.dto.siscoop.CustomerSearchDTO;
+import com.fenoreste.rest.modelos.entidad.Persona;
+import com.github.cliftonlabs.json_simple.JsonObject;
 import java.util.List;
 import javax.json.Json;
+import javax.json.JsonArray;
 import javax.json.JsonArrayBuilder;
-import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
+import javax.json.JsonValue;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 
@@ -32,52 +35,48 @@ public class CustomerServices {
         CustomerDAO datos = new CustomerDAO();
 
         JsonObjectBuilder ObjectBuilder = Json.createObjectBuilder();
-        JsonArrayBuilder arrayEsqueleto = Json.createArrayBuilder();
-        JsonObject ArrayProductos = null;
-        JsonObject Warnings = null;
-        JsonObject JsonRegreso = null;
-        JsonObject datosOK = null;
-        JsonObject Not_Found = null;
-        JsonObject Error = null;
+        JsonArrayBuilder arrayEsqueleto = Json.createArrayBuilder();        
+        JsonObject JsonSocios = new JsonObject();        
+        JsonObject Not_Found = new JsonObject() ;
         JSONObject datosEntrada = new JSONObject(cadena);
-
+        System.out.println("Objeto Json:" + datosEntrada);
         System.out.println("cadena:" + cadena);
-        String nombre = datosEntrada.getString("name").trim();
-        System.out.println("nombre:" + nombre);
+
+        JSONObject mainObject = new JSONObject(cadena);
+        String cif = "";
+        for (int i = 0; i < mainObject.length(); i++) {
+            String fi = mainObject.getString("filters");
+            JSONArray json = new JSONArray(fi);
+            for (int x = 0; x < json.length(); x++) {
+                JSONObject jsonO = new JSONObject(json.getJSONObject(x).toString());
+                cif = jsonO.getString("value");
+            }
+        }
+
         try {
-            List<Object[]> customerSearch = datos.search(nombre);
-
-            // add("totalRecords",String.valueOf(customerSearch.size()))
-            for (Object[] cus_search : customerSearch) {
-                JsonObjectBuilder data = Json.createObjectBuilder();
-                JsonObject clientes = data
-                        .add("customerId", cus_search[0].toString())
-                        .add("name", cus_search[1].toString())
-                        .add("customerType", cus_search[2].toString()).build();
-                arrayEsqueleto.add(clientes);
-            }
-            if (arrayEsqueleto.toString().length() > 0) {
-                Warnings = ObjectBuilder.add("code", "string")
-                        .add("message", "string").build();
-                ArrayProductos = ObjectBuilder.add("Clientes", arrayEsqueleto).build();
-                datosOK = ObjectBuilder.add("Warnings", Warnings)
-                        .add("totalRecords", customerSearch.size())
-                        .add("", ArrayProductos).build();
+            List<CustomerSearchDTO> lista = datos.search(cif);
+            CustomerSearchDTO cliente = null;
+            System.out.println("Lista en servicios:" + lista);
+            if (lista.size() > 0) {
+                System.out.println("entro");                
+                JsonSocios.put("customers",lista);
+                return Response.status(Response.Status.OK).entity(JsonSocios).build();
             } else {
-                datosOK = Json.createObjectBuilder()
-                        .add("title", "No se encontraron registros:")
-                        .build();
+                Not_Found.put("type", "urn:vn:error-codes:VAL00003");
+                Not_Found.put("title", "Socios no encontrados");
+                datos.cerrar();
+                return Response.status(Response.Status.NO_CONTENT).entity(Not_Found.toString()).build();
             }
 
-            return Response.status(Response.Status.OK).entity(datosOK.toString()).build();
         } catch (Exception e) {
-            Not_Found = Json.createObjectBuilder()
-                    .add("type", "urn:vn:error-codes:VAL00003")
-                    .add("title", "Error en el proceso de escritura Json")
-                    .build();
-            return Response.status(Response.Status.EXPECTATION_FAILED).entity(Not_Found.toString()).build();
+            System.out.println("Error:" + e.getMessage());
+            Not_Found.put("type", "urn:vn:error-codes:VAL00003");
+            Not_Found.put("title", "Error en el proceso de escritura Json");
+            datos.cerrar();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(Not_Found.toString()).build();
+
         } finally {
-            datos.finalize();
+            datos.cerrar();
         }
     }
 
@@ -87,67 +86,81 @@ public class CustomerServices {
     @Consumes({MediaType.APPLICATION_JSON})
     public Response getDetails(String cadena) throws Throwable {
         CustomerDAO datos = new CustomerDAO();
-        JsonObject datosOK = null;
+        
         JsonObject Not_Found = null;
         JsonObject Error = null;
         System.out.println("entro");
+        JsonObject JsonSocios = new JsonObject();
+        JsonObjectBuilder ObjectBuilder = Json.createObjectBuilder();
         try {
-            JSONObject datosEntrada = new JSONObject(cadena);
-            String customerIdE = datosEntrada.getString("customerId").trim();
-            System.out.println("CustomerId:" + customerIdE);
-            List<Object[]> customerDetails = datos.details(customerIdE);
-            if (customerDetails.size() > 0) {
-                for (Object[] cus_detail : customerDetails) {
-                    JsonObjectBuilder data = Json.createObjectBuilder();
-                    datosOK = data.add("warnings", Json.createObjectBuilder()
-                            .add("code", "string").build())
-                            .add("customer", Json.createObjectBuilder()
-                                    .add("customerId", cus_detail[0].toString())
-                                    .add("name", cus_detail[1].toString())
-                                    .add("taxId", cus_detail[2].toString())
-                                    .add("customerType", cus_detail[3].toString())
-                                    .add("contactDetails", Json.createObjectBuilder()
-                                            .add("emails", Json.createObjectBuilder()
-                                                    .add("value", "")//cus_detail[4].toString())
-                                                    .add("type", "personal").build())
-                                            .add("phones", Json.createObjectBuilder()
-                                                    .add("value", ""))//cus_detail[5].toString())
-                                            .add("type", "mobile").build())
-                                    .add("addresses", Json.createObjectBuilder()
-                                            .add("type", "")//cus_detail[6].toString())
-                                            .add("countryCode", "")//cus_detail[7].toString())
-                                            .add("state", "")//cus_detail[8].toString())
-                                            .add("country", "string")
-                                            .add("city", "string")
-                                            .add("zip", "string")
-                                            .add("district", "string")
-                                            .add("street", "string")
-                                            .add("number", "string")
-                                            .add("name", "string")
-                                            .add("apartament", "string").build()))
-                            .add("property1", Json.createObjectBuilder()
-                                    .add("description", "string").build())
-                            .add("property2", Json.createObjectBuilder()
-                                    .add("description", "string").build())
-                            .build();
-                }
+            JSONObject jsonE = new JSONObject(cadena);
+            String customerId = jsonE.getString("customerId");
+            CustomerDetailsDTO socio = datos.details(customerId);
+
+            if (socio.getName() != null && socio.getCustomerId() != null) {
+                System.out.println("entro");
+                
+                JsonObject clientes=new JsonObject();
+                clientes.put("customerId", socio.getCustomerId());
+                clientes.put("name", socio.getName());
+                clientes.put("customerType", socio.getcustomerType());                
+                JsonSocios.put("customer", clientes);
+                return Response.status(Response.Status.ACCEPTED).entity(JsonSocios).build();
 
             } else {
-                datosOK = Json.createObjectBuilder()
-                        .add("type", "urn:vn:error-codes:VAL00003")
-                        .add("title", "The requested object could not be found:" + customerIdE).build();
+              Not_Found.put("type", "urn:vn:error-codes:VAL00003");
+              Not_Found.put("title", "Socios no encontrados");
+              return Response.status(Response.Status.NO_CONTENT).entity(JsonSocios).build();
             }
-            return Response.status(Response.Status.ACCEPTED).entity(datosOK.toString()).build();
+
         } catch (Exception e) {
-            Error = Json.createObjectBuilder()
-                    .add("type", "urn:vn:error-codes:SE00002")
-                    .add("title", "Unexpected error")
-                    .add("detail", "parameter not found")
-                    .add("instance", "").build();
-            return Response.status(Response.Status.BAD_REQUEST).entity(Error.toString()).build();
+            System.out.println("Error:" + e.getMessage());
+            Not_Found.put("type", "urn:vn:error-codes:VAL00003");
+            Not_Found.put("title", "Error en el proceso de escritura Json");
+            datos.cerrar();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(Not_Found.toString()).build();
+
         } finally {
-            datos.finalize();
+            datos.cerrar();
         }
+
+    }
+
+    @POST
+    @Path("/contactDetails")
+    @Produces({MediaType.APPLICATION_JSON})
+    @Consumes({MediaType.APPLICATION_JSON})
+    public Response contactDetails(String cadena) throws Throwable {
+        
+        CustomerDAO datos = new CustomerDAO();
+        JsonObjectBuilder ObjectBuilder = Json.createObjectBuilder();
+        JsonArrayBuilder arrayEsqueleto = Json.createArrayBuilder();
+        JsonObject MiddleContacts = new JsonObject();
+        JsonObject Error = null;
+        JSONObject datosEntrada = new JSONObject(cadena);
+        String ogs=datosEntrada.getString("customerId");
+        System.out.println("Objeto Json:" + datosEntrada);
+        System.out.println("cadena:" + cadena);
+        try{
+        List<CustomerContactDetails>listaContacto = datos.ContactDetails(ogs);
+        CustomerContactDetails detalle = new CustomerContactDetails();
+        if(listaContacto.size() > 0 ){
+           MiddleContacts.put("contactDetails",listaContacto);
+           datos.cerrar();
+           return Response.status(Response.Status.OK).entity(MiddleContacts).build();
+                
+        }else{
+            Error.put("type", "urn:vn:error-codes:VAL00003");
+            Error.put("title", "Datos no encontrados");
+            datos.cerrar(); 
+            return Response.status(Response.Status.NO_CONTENT).entity(Error).build(); 
+        }      
+        }catch(Exception e){
+          
+            datos.cerrar(); 
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(Error).build();   
+        }
+
     }
 
     @POST
@@ -156,74 +169,67 @@ public class CustomerServices {
     @Consumes({MediaType.APPLICATION_JSON})
     public Response getAccounts(String cadena) throws Throwable {
         CustomerDAO datos = new CustomerDAO();
-        JsonObject datosOK = null;
-        JsonObject Not_Found = null;
+        javax.json.JsonObject datosOK =null;
+        JsonObject Not_Found = new JsonObject();
         JsonObject Error = null;
         JsonArrayBuilder arraycuentas = Json.createArrayBuilder();
-        try {
-            JSONObject datosEntrada = new JSONObject(cadena);
-            String customerIdE = datosEntrada.getString("customerId").trim();
-            System.out.println("CustomerId:" + customerIdE);
-            List<Object[]> customerAccounts = datos.getAccounts(customerIdE);
-
-            if (customerAccounts.size() > 0) {
-                for (Object[] cus_accounts : customerAccounts) {
+             
+        try {            
+        JSONObject mainObject = new JSONObject(cadena);
+        String cif = mainObject.getString("customerId");
+        System.out.println("Cif:"+cif);
+        List<CustomerAccountDTO>cuentas = datos.Accounts(cif);
+            System.out.println("Regeso:"+cuentas);
+            if (cuentas.size() > 0) {
+                System.out.println("si entro");
+                
+                for (int i=0;i<cuentas.size();i++) {
                     JsonObjectBuilder data = Json.createObjectBuilder();
+                    CustomerAccountDTO cuenta=cuentas.get(i);
+                    
+                    
                     datosOK = data
-                            .add("accountId", cus_accounts[2].toString())
-                            .add("accountNumber", cus_accounts[3].toString())
-                            .add("displayAccountNumber", cus_accounts[4].toString())
-                            .add("accountType", cus_accounts[14].toString())
-                            .add("currencyCode", cus_accounts[11].toString())
-                            .add("productCode", cus_accounts[11].toString())
-                            .add("status", cus_accounts[6].toString())
+                            .add("accountId",cuenta.getAccountId())
+                            .add("accountNumber", cuenta.getAccountNumber())
+                            .add("displayAccountNumber", cuenta.getDisplayAccountNumber())
+                            .add("accountType", cuenta.getAccountTye())
+                            .add("currencyCode", cuenta.getCurrencyCode())
+                            .add("productCode", cuenta.getProductCode())
+                            .add("status", cuenta.getStatus())
                             .add("restrictions", Json.createArrayBuilder()
-                                    .add("credits").build())
+                                    .build())
                             .add("customerRelations", Json.createArrayBuilder()
                                     .add(Json.createObjectBuilder()
-                                            .add("relationCode", "")
-                                            .add("relationtype", "")
+                                            .add("relationCode", "SOW")
+                                            .add("relationtype", "self")
                                             .build())
                                     .build())
                             .add("hasBalances", true)
-                            .add("property1", Json.createObjectBuilder()
-                                    .add("description", "string").build())
-                            .add("property2", Json.createObjectBuilder()
-                                    .add("description", "string").build())
                             .build();
 
                     arraycuentas.add(datosOK);
 
                 }
-                JsonObject Found = Json.createObjectBuilder()
-                        .add("warnings", Json.createObjectBuilder()
-                                .add("code", "string")
-                                .add("message", "string").build())
+                javax.json.JsonObject Found = Json.createObjectBuilder()
                         .add("accounts", arraycuentas)
-                        .add("property1", Json.createObjectBuilder()
-                                .add("description", "string").build())
-                        .add("property2", Json.createObjectBuilder()
-                                .add("description", "string").build())
                         .build();
-                return Response.status(Response.Status.OK).entity(Found.toString()).build();
+                return Response.status(Response.Status.OK).entity(Found).build();
             } else {
-                Not_Found = Json.createObjectBuilder()
-                        .add("type", "urn:vn:error-codes:VAL00003")
-                        .add("title", "The requested object could not be found:" + customerIdE).build();
-                return Response.status(Response.Status.NOT_FOUND).entity(Not_Found.toString()).build();
+                System.out.println("Aqui");
+                Not_Found.put("type", "urn:vn:error-codes:VAL00003");
+                Not_Found.put("title", "Sin registros para usuario:"+cif);
+                return Response.status(Response.Status.NOT_FOUND).entity(Not_Found).build();
 
             }
+         
         } catch (Exception e) {
-            Error = Json.createObjectBuilder()
-                    .add("type", "urn:vn:error-codes:SE00002")
-                    .add("title", "Unexpected error")
-                    .add("detail", "parameter not found" + e.getMessage())
-                    .add("instance", e.getMessage())
-                    .build();
+            Error.put("type", "urn:vn:error-codes:SE00002");
+            Error.put("title","parametros incorrectos");
+            datos.cerrar();
             return Response.status(Response.Status.BAD_REQUEST).entity(Error.toString()).build();
 
         } finally {
-            datos.finalize();
+            datos.cerrar();
         }
     }
 
@@ -241,7 +247,7 @@ public class CustomerServices {
         CustomerServices custServices = new CustomerServices();
 
         if (!customerId.equals("")) {
-            datosOk = Json.createObjectBuilder()
+            /*datosOk = Json.createObjectBuilder()
                     .add("warnings:", Json.createObjectBuilder()
                             .add("code", "string")
                             .add("message", "string").build())
@@ -250,7 +256,7 @@ public class CustomerServices {
                             .add("description", "string").build())
                     .add("property1", Json.createObjectBuilder()
                             .add("description", "string").build())
-                    .build();
+                    .build();*/
         }
 
         return Response.status(Response.Status.OK).entity(datosOk).build();

@@ -11,7 +11,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.fenoreste.rest.dao.UsuarioDao;
-import com.fenoreste.rest.modelos.Usuario;
+import com.fenoreste.rest.modelos.entidad.Usuario;
 
 @Path("/pruebas")
 public class prueba {

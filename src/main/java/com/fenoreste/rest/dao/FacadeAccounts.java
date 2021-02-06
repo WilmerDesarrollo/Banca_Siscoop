@@ -2,7 +2,7 @@ package com.fenoreste.rest.dao;
 
 import com.fenoreste.rest.dto.siscoop.accountDTO;
 import com.fenoreste.rest.impl.AbstractFacade;
-import com.fenoreste.rest.modelos.cuentas_banca_movil;
+import com.fenoreste.rest.modelos.entidad.cuentas_banca_movil;
 import java.util.Arrays;
 import java.util.List;
 import javax.persistence.EntityManager;

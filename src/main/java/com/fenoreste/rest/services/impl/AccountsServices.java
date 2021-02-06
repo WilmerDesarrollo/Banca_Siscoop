@@ -16,7 +16,6 @@ import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
 import com.fenoreste.rest.dao.AccountsDAO;
 import com.fenoreste.rest.dto.siscoop.accountDTO;
-import com.google.gson.JsonArray;
 
 @Path("/account")
 public class AccountsServices {
@@ -29,7 +28,7 @@ public class AccountsServices {
     @Consumes({MediaType.APPLICATION_JSON})
     public Response getValidation(String cadena) throws Throwable { 
         System.out.println("Llego cadena:"+cadena);
-       JsonObjectBuilder ObjectBuilder=Json.createObjectBuilder();
+        JsonObjectBuilder ObjectBuilder=Json.createObjectBuilder();
  	JsonObject DatosOK=null; 	
  	JsonObject JsonNotFound=null;
  	JsonObject JsonError=null;

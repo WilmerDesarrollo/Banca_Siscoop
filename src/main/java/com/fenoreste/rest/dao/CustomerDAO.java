@@ -1,6 +1,6 @@
 package com.fenoreste.rest.dao;
 
-import com.fenoreste.rest.modelos.Persona;
+import com.fenoreste.rest.modelos.entidad.Persona;
 
 public class CustomerDAO extends FacadeCustomer<Persona> {
 
