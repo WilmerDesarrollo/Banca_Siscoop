@@ -26,7 +26,7 @@ import javax.ws.rs.core.Response;
  *
  * @author wilmer
  */
-@Path("/GetCountries")
+@Path("/Countries")
 public class CountriesServices {
 
     @GET
