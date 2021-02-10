@@ -5,12 +5,16 @@
  */
 package com.fenoreste.rest.services.impl;
 
-import com.fenoreste.rest.dao.CustomerDAO;
+import com.fenoreste.rest.dto.siscoop.ClearingCodeRulesDTO;
+import com.fenoreste.rest.dto.siscoop.CountriesDTO;
+import com.fenoreste.rest.impl.AbstractFacade;
+import com.fenoreste.rest.modelos.entidad.Paises_Siscoop;
+import com.github.cliftonlabs.json_simple.JsonObject;
+import java.util.ArrayList;
 import java.util.List;
-import javax.json.Json;
-import javax.json.JsonArrayBuilder;
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.criteria.CriteriaQuery;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -22,46 +26,65 @@ import javax.ws.rs.core.Response;
  *
  * @author wilmer
  */
-@Path("/countries")
+@Path("/GetCountries")
 public class CountriesServices {
-    
-    
-         @GET
-         @Produces({MediaType.APPLICATION_JSON})
-         @Consumes({MediaType.APPLICATION_JSON})
-    
-         public Response getCountries(){   
-                     CustomerDAO datos=new CustomerDAO();
-                     JsonObject datosB=null;
-                     JsonObject datosOK=null;
-                     JsonObjectBuilder ObjectBuilder=Json.createObjectBuilder();
-                     JsonArrayBuilder  arrayEsqueleto=Json.createArrayBuilder();
-                     JsonArrayBuilder  paises=Json.createArrayBuilder();
-                     JsonObject ArrayPaises=null;
-                     List<Object[]>lista=datos.countries();
-             
-          try{
-              
-                   
-             for(Object[]obj:lista){
-                datosB=Json.createObjectBuilder()
-                                       .add("code",obj[0].toString())
-                                       .add("name",obj[1].toString())
-                        .build();      
-                arrayEsqueleto.add(datosB);
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    @Consumes({MediaType.APPLICATION_JSON})
+    public Response getCountries() {
+        EntityManagerFactory emf = AbstractFacade.conexion();
+        JsonObject json = new JsonObject();
+        JsonObject jsonInfo = new JsonObject();
+        try {
+            EntityManager em = emf.createEntityManager();
+            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
+            cq.select(cq.from(Paises_Siscoop.class));
+            List<Paises_Siscoop> lista = em.createQuery(cq).getResultList();
+            List<CountriesDTO> ListaReal = new ArrayList<CountriesDTO>();
+            for (int x = 0; x < lista.size(); x++) {
+                CountriesDTO dto = new CountriesDTO(lista.get(x).getCode(),lista.get(x).getName());
+                ListaReal.add(dto);
             }
-                ArrayPaises=ObjectBuilder.add("Clientes",arrayEsqueleto).build();
-                datosOK=ObjectBuilder
-                                                                  .add("totalRecords",lista.size())
-                                                                  .add("",ArrayPaises).build();
-           
-          }catch(Exception e){
-              System.out.println("Error al buscar paises:"+e.getMessage());
-          }
-              
-            return Response.status(Response.Status.OK).entity(datosOK.toString()).build();
-                     
-         }
-           
-           
+            json.put("countries", ListaReal);
+            return Response.status(Response.Status.OK).entity(json).build();
+        } catch (Exception e) {
+            System.out.println("Error en buscar paises:"+e.getMessage());
+            jsonInfo.put("Error", "Datos no encontrados");
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(jsonInfo).build();
+        } finally {
+            emf.close();
+        }
+
+    }
+
+    @GET
+    @Path("/ClearingCodeRules")
+    @Produces({MediaType.APPLICATION_JSON})
+    @Consumes({MediaType.APPLICATION_JSON})
+    public Response getClearingCodeRules() {
+        EntityManagerFactory emf = AbstractFacade.conexion();
+        JsonObject json = new JsonObject();
+        JsonObject jsonInfo = new JsonObject();
+        try {
+            EntityManager em = emf.createEntityManager();
+            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
+            cq.select(cq.from(Paises_Siscoop.class));
+            List<Paises_Siscoop> lista = em.createQuery(cq).getResultList();
+            List<ClearingCodeRulesDTO> ListaReal = new ArrayList<ClearingCodeRulesDTO>();
+            for (int x = 0; x < lista.size(); x++) {
+                ClearingCodeRulesDTO dto = new ClearingCodeRulesDTO(lista.get(x).getCode(), "numeric");
+                ListaReal.add(dto);
+            }
+            json.put("clearingCodeRules", ListaReal);
+            return Response.status(Response.Status.OK).entity(json).build();
+        } catch (Exception e) {
+            System.out.println("Error en ClearingCodeRules:"+e.getMessage());
+            jsonInfo.put("Error", "Datos no encontrados");
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(jsonInfo).build();
+        } finally {
+            emf.close();
+        }
+    }
+
 }

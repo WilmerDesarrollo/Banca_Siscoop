@@ -8,6 +8,7 @@ import com.fenoreste.rest.dto.siscoop.CustomerDetailsDTO;
 import com.fenoreste.rest.dto.siscoop.CustomerSearchDTO;
 import com.fenoreste.rest.modelos.entidad.Persona;
 import com.github.cliftonlabs.json_simple.JsonObject;
+import java.math.BigDecimal;
 import java.util.List;
 import javax.json.Json;
 import javax.json.JsonArray;
@@ -238,27 +239,29 @@ public class CustomerServices {
     @Produces({MediaType.APPLICATION_JSON})
     @Consumes({MediaType.APPLICATION_JSON})
     public Response res(String cadena) throws JSONException {
-        JsonObject datosOk = null;
-        JsonObject datosError = null;
+        JsonObject datosOk = new JsonObject();
+        com.github.cliftonlabs.json_simple.JsonObject jsons=new com.github.cliftonlabs.json_simple.JsonObject();
+        JsonObject datosError = new JsonObject();
+        JsonObject jsito=new JsonObject();
         JsonObject NotFound = null;
 
         JSONObject datosEntrada = new JSONObject(cadena);
         String customerId = datosEntrada.getString("customerId").trim();
         CustomerServices custServices = new CustomerServices();
-
-        if (!customerId.equals("")) {
-            /*datosOk = Json.createObjectBuilder()
-                    .add("warnings:", Json.createObjectBuilder()
-                            .add("code", "string")
-                            .add("message", "string").build())
-                    .add("templateCodes:", "string")
-                    .add("property1", Json.createObjectBuilder()
-                            .add("description", "string").build())
-                    .add("property1", Json.createObjectBuilder()
-                            .add("description", "string").build())
-                    .build();*/
+        System.out.println("customerId:"+customerId);
+        try {
+             if (!customerId.equals("")) {
+            
+            datosOk.put("templatesCodes:",Json.createArrayBuilder().add("Single-user-Template").add("Single-user for Apps Template").build());
+            jsito.put("valueType", "string");
+            jsito.put("value","0");
+            datosOk.put("Templates",jsito); 
+           }
+        } catch (Exception e) {
+            System.out.println("Error:"+e.getMessage()); 
         }
-
+                  
+                  
         return Response.status(Response.Status.OK).entity(datosOk).build();
     }
 

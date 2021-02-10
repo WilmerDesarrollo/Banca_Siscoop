@@ -20,7 +20,7 @@ import javax.persistence.criteria.Root;
  */
 public abstract class AbstractFacade<T> {
     private EntityManager em;
-    private final Class<T> entityClass;
+    public final Class<T> entityClass;
 
     public AbstractFacade(Class<T> entityClass) {
         this.entityClass = entityClass;
@@ -93,7 +93,7 @@ public abstract class AbstractFacade<T> {
         return find;
     }
 
-    public List<T> findAll() {
+    public  List<T> findAll() {
        EntityManagerFactory emf=conexion();
        em = emf.createEntityManager();
         CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
@@ -102,6 +102,7 @@ public abstract class AbstractFacade<T> {
         em.close();
         return lista;
     }
+    
 
     public List<T> findRange(int[] range) {
         EntityManagerFactory emf=conexion();

@@ -1,5 +1,6 @@
 package com.fenoreste.rest.dao;
 
+import com.fenoreste.rest.dto.siscoop.CountriesDTO;
 import com.fenoreste.rest.dto.siscoop.CustomerContactDetails;
 import com.fenoreste.rest.dto.siscoop.CustomerDetailsDTO;
 import com.fenoreste.rest.dto.siscoop.CustomerSearchDTO;
@@ -11,10 +12,10 @@ import javax.persistence.Query;
 
 import com.fenoreste.rest.impl.AbstractFacade;
 import com.fenoreste.rest.modelos.entidad.Auxiliares;
-import com.fenoreste.rest.modelos.entidad.AuxiliaresPK;
+import com.fenoreste.rest.modelos.entidad.Paises_Siscoop;
 import com.fenoreste.rest.modelos.entidad.Persona;
 import com.fenoreste.rest.modelos.entidad.PersonasPK;
-import com.fenoreste.rest.modelos.entidad.tiposCuentaSiscoop;
+import com.fenoreste.rest.modelos.entidad.CuentasSiscoop;
 import java.util.ArrayList;
 
 public abstract class FacadeCustomer<T> {
@@ -101,99 +102,95 @@ public abstract class FacadeCustomer<T> {
         try {
             query = em.createNativeQuery(consulta);
             ListaObjetos = query.getResultList();
-            System.out.println("Size:"+ListaObjetos.size());
+            System.out.println("Size:" + ListaObjetos.size());
             for (Object[] obj : ListaObjetos) {
-                System.out.println("Ok:"+obj[0].toString());
+                System.out.println("Ok:" + obj[0].toString());
                 if (!obj[0].toString().equals("0")) {
                     System.out.println("Entro");
                     contactsPhone.setCustomerContactId(customerId);
                     contactsPhone.setCustomerContactType("phone");
                     contactsPhone.setPhoneNumber(obj[0].toString());
                     ListaContactos.add(contactsPhone);
-                    
+
                 }
-                if(!obj[1].toString().equals("0")){
-                   contactsCellphone.setCustomerContactId(customerId);
+                if (!obj[1].toString().equals("0")) {
+                    contactsCellphone.setCustomerContactId(customerId);
                     contactsCellphone.setCustomerContactType("cellphone");
                     contactsCellphone.setCellphoneNumber(obj[1].toString());
-                    ListaContactos.add(contactsCellphone);  
+                    ListaContactos.add(contactsCellphone);
                 }
-                if(!obj[2].toString().equals("0")){
+                if (!obj[2].toString().equals("0")) {
                     contactsEmail.setCustomerContactId(customerId);
                     contactsEmail.setCustomerContactType("email");
                     contactsEmail.setEmail(obj[2].toString());
-                    ListaContactos.add(contactsEmail);  
+                    ListaContactos.add(contactsEmail);
                 }
-                
+
             }
-            System.out.println("ListaContactos:"+ListaContactos);
+            System.out.println("ListaContactos:" + ListaContactos);
 
             cerrar();
         } catch (Exception e) {
             System.out.println("Error al obtener detalles del socio:" + e.getMessage());
             cerrar();
         }
-        
+
         return ListaContactos;
     }
 
     public List<CustomerAccountDTO> Accounts(String customerId) {
         EntityManager em = emf.createEntityManager();
         Query query = null;
-        List<CustomerAccountDTO>ListaProductos=new ArrayList<>();
+        List<CustomerAccountDTO> ListaProductos = new ArrayList<>();
         String consulta = "SELECT * FROM auxiliares a WHERE replace((to_char(idorigen,'099999')||to_char(idgrupo,'09')||to_char(idsocio,'099999')),' ','')='" + customerId + "'";
-        CustomerAccountDTO producto=new CustomerAccountDTO();
+        CustomerAccountDTO producto = new CustomerAccountDTO();
         try {
-            
-            query = em.createNativeQuery(consulta,Auxiliares.class);
-            List<Auxiliares>ListaProd= query.getResultList();
-            String status="";
+
+            query = em.createNativeQuery(consulta, Auxiliares.class);
+            List<Auxiliares> ListaProd = query.getResultList();
+            String status = "";
             String accountType = "";
-            Object[]arr ={};
-            Object[]arr1 ={"relationCode","SOW"};
-            List<CustomerAccountDTO> listaDeCuentas=new ArrayList<>();
-            Query query1=em.createNativeQuery("SELECT dato2 FROM tablas WHERE idtabla='siscoop_banca_movil' AND idelemento='tipo_cuenta_ahorro'");
-            String ahorros=(String)query1.getSingleResult();
-            String[]arrAhorros=ahorros.split(",");
-            
-            Query query2=em.createNativeQuery("SELECT dato2 FROM tablas WHERE idtabla='siscoop_banca_movil' AND idelemento='tipo_cuenta_prestamo'");
-            String prestamos=(String)query1.getSingleResult();
-            String[]arrPrestamos=prestamos.split(",");
-            
-            
-            
-           int idproducto=0;
-           int prod=0;
-            for(int k=0;k<1;k++){
-            for(int i=0;i<ListaProd.size();i++){
-                Auxiliares a=ListaProd.get(i);            
-                System.out.println("IdproductoA:"+a.getAuxiliaresPK().getIdproducto());
-                try {
-                    tiposCuentaSiscoop tp=em.find(tiposCuentaSiscoop.class, a.getAuxiliaresPK().getIdproducto());
-                accountType=String.valueOf(tp.getTipocuenta());
-                } catch (Exception e) {
+            Object[] arr = {};
+            Object[] arr1 = {"relationCode", "SOW"};
+            List<CustomerAccountDTO> listaDeCuentas = new ArrayList<>();
+            Query query1 = em.createNativeQuery("SELECT dato2 FROM tablas WHERE idtabla='siscoop_banca_movil' AND idelemento='tipo_cuenta_ahorro'");
+            String ahorros = (String) query1.getSingleResult();
+            String[] arrAhorros = ahorros.split(",");
+
+            Query query2 = em.createNativeQuery("SELECT dato2 FROM tablas WHERE idtabla='siscoop_banca_movil' AND idelemento='tipo_cuenta_prestamo'");
+            String prestamos = (String) query1.getSingleResult();
+            String[] arrPrestamos = prestamos.split(",");
+
+            int idproducto = 0;
+            int prod = 0;
+            for (int k = 0; k < 1; k++) {
+                for (int i = 0; i < ListaProd.size(); i++) {
+                    Auxiliares a = ListaProd.get(i);
+                    System.out.println("IdproductoA:" + a.getAuxiliaresPK().getIdproducto());
+                    try {
+                        CuentasSiscoop tp = em.find(CuentasSiscoop.class, a.getAuxiliaresPK().getIdproducto());
+                        accountType = String.valueOf(tp.getTipocuenta());
+                    } catch (Exception e) {
+                    }
+
+                    if (a.getEstatus() == 2) {
+                        status = "OPEN";
+                    } else if (a.getEstatus() == 3) {
+                        status = "CLOSED";
+                    } else {
+                        status = "INACTIVE";
+                    }
+                    producto = new CustomerAccountDTO(
+                            customerId, a.getAuxiliaresPK().getIdorigenp() + "" + a.getAuxiliaresPK().getIdproducto() + "" + a.getAuxiliaresPK().getIdauxiliar(),
+                            a.getAuxiliaresPK().getIdorigenp() + "" + a.getAuxiliaresPK().getIdproducto() + "" + a.getAuxiliaresPK().getIdauxiliar(),
+                            accountType, "", "", status, arr, arr1);
+                    listaDeCuentas.add(producto);
+                    accountType = "";
                 }
-                
-                
-                
-                if(a.getEstatus()==2){
-                    status="OPEN";
-                }else if(a.getEstatus()==3){
-                    status="CLOSED";
-                }else{
-                    status="INACTIVE";
-                }
-                producto=new CustomerAccountDTO(
-                customerId,a.getAuxiliaresPK().getIdorigenp()+""+a.getAuxiliaresPK().getIdproducto()+""+a.getAuxiliaresPK().getIdauxiliar(),
-                           a.getAuxiliaresPK().getIdorigenp()+""+a.getAuxiliaresPK().getIdproducto()+""+a.getAuxiliaresPK().getIdauxiliar(),
-                           accountType,"","",status,arr,arr1);
-               listaDeCuentas.add(producto);
-               accountType="";
-            } 
             }
-            System.out.println("Lista de cuentas:"+listaDeCuentas);
+            System.out.println("Lista de cuentas:" + listaDeCuentas);
             return listaDeCuentas;
-            
+
         } catch (Exception e) {
 
             System.out.println("Error al obtener cuentas:" + e.getMessage());
@@ -209,12 +206,6 @@ public abstract class FacadeCustomer<T> {
         return null;
     }
 
-    public List<Object[]> countries() {
-        EntityManager em = emf.createEntityManager();
-        Query query = em.createNativeQuery("SELECT * FROM paises");
-        List<Object[]> lista = query.getResultList();
-        return lista;
-    }
 
     public void cerrar() {
         emf.close();

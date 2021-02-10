@@ -16,7 +16,7 @@ import java.io.FileReader;
 public class Fichero_Configuraciones {
  
           
-    String fichero = "config.txt";
+    String fichero = "config.config";
     String nbd = "";
     String ipbd = "";
 

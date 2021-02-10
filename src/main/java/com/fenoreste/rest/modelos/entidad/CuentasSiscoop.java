@@ -18,7 +18,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "tipos_cuenta_siscoop")
-public class tiposCuentaSiscoop {
+public class CuentasSiscoop {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,10 +27,10 @@ public class tiposCuentaSiscoop {
     @Column(name="tipocuenta")
     private String tipocuenta;
 
-    public tiposCuentaSiscoop() {
+    public CuentasSiscoop() {
     }
 
-    public tiposCuentaSiscoop(Integer idproducto, String tipocuenta) {
+    public CuentasSiscoop(Integer idproducto, String tipocuenta) {
         this.idproducto = idproducto;
         this.tipocuenta = tipocuenta;
     }
