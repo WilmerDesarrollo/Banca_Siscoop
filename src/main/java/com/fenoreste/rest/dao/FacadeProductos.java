@@ -121,7 +121,7 @@ public abstract class FacadeProductos<T> {
         return query.getResultList();
     }
 
-    public void cerrar() throws Throwable {
+    public void cerrar(){
         emf.close();
     }
 }

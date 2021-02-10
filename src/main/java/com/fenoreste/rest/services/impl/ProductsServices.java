@@ -57,6 +57,8 @@ public class ProductsServices {
          com.github.cliftonlabs.json_simple.JsonObject Error = new com.github.cliftonlabs.json_simple.JsonObject(); 
          Error.put("Error","Interno en el servidor");
          return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(Error).build();
+        }finally{
+         pr.cerrar();
         }
         return null;
     }
